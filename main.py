@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from models.model_struct import load_data, RNNPredictor
 
 # Загрузка модели
-path = 'models/trained_model.pt'  # Укажите путь к вашей модели
+path = 'trained_model.pt'  # Укажите путь к вашей модели
 predictor = RNNPredictor(model_path=path, input_size=202, hidden_size=64, output_size=1)
 
 all_columns = load_data(r'C:\Users\anton\Downloads\Telegram Desktop\normalized_frames.json').columns

@@ -65,12 +65,12 @@ def create_sequences(x_train, y_train, x_test, y_test, sequence_length):
 class SimpleRNN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size, num_layers=15):
         super(SimpleRNN, self).__init__()
-        self.rnn = nn.RNN(input_size, hidden_size, num_layers=num_layers)
+        self.rnn = nn.RNN(input_size, hidden_size, num_layers=num_layers, )
         self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
         out, _ = self.rnn(x)
-        out = self.fc(out[-1, :])
+        out = self.fc(out[:, -1, :])  # Используем только последний выход
         return out
 
 
@@ -82,16 +82,20 @@ def train_model(model, x_train_tensor, y_train_tensor, num_epochs, batch_size, c
         model.train()
         optimizer.zero_grad()
         outputs = model(x_train_tensor)
+        print('outputs', outputs.shape)
+        print('train', y_train_tensor.shape)
         loss = criterion(outputs.squeeze(), y_train_tensor)
         loss.backward()
         optimizer.step()
 
+        # Итерация по пакетам
         for i in range(len(X_train_batches)):
             outputs = model(X_train_batches[i])
             loss = criterion(outputs.squeeze(), y_train_batches[i])
             loss.backward()
             optimizer.step()
 
+            # Вычисление и вывод MSE на тренировочных данных
             with torch.no_grad():
                 train_predictions = model(x_train_tensor)
                 train_mse = mean_squared_error(train_predictions.cpu().squeeze().numpy(), y_train_tensor.cpu().numpy())

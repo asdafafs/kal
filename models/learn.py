@@ -22,14 +22,14 @@ x_train_tensor, y_train_tensor, x_test_tensor, y_test_tensor = create_sequences(
 
 # Определение параметров модели
 input_size = x_train_tensor.shape[2]  # Входной размер равен количеству признаков
-hidden_size = 64  # Например, 64 нейрона в скрытом слое
+hidden_size = 264  # Например, 64 нейрона в скрытом слое
 output_size = 1  # Выходной размер, предположим, у вас одномерный выход
 
 # Инициализация модели
 model = SimpleRNN(input_size, hidden_size, output_size).to('cuda')
 
 # Определение параметров обучения
-num_epochs = 10
+num_epochs = 100
 batch_size = 32
 learning_rate = 0.001
 
